@@ -18,6 +18,16 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->unsignedBigInteger('likes')->nullable()->default(0);
             $table->boolean('published')->default(1);
+
+
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->index('category_id', 'post_category_idx');
+            $table->foreign('category_id', 'post_category_fk')
+                ->references('id')
+                ->on('categories')
+                ->onDelete('set null');
+
+
             $table->timestamps();
             $table->softDeletes();
         });
