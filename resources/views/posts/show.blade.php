@@ -11,19 +11,15 @@
 
         <div class="card shadow-sm">
             <div class="card-body">
-                {{-- Display Image if Available --}}
                 @if($post->image)
-                    <img src="{{ asset('storage/' . $post->image) }}" alt="Post Image" class="img-fluid rounded mb-3" style="max-width: 100%;">
+                    <img src="{{ asset('storage/' . $post->image) }}" alt="Post Image" class="img-fluid rounded mb-1" style="max-width: 30%;">
                 @endif
 
-                {{-- Post Content --}}
                 <p class="lead">{!! nl2br(e($post->content)) !!}</p>
 
                 <div class="d-flex justify-content-between mt-4">
-                    {{-- Edit Button --}}
                     <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-warning">Edit Post</a>
 
-                    {{-- Delete Form --}}
                     <form action="{{ route('posts.destroy', $post->id) }}" method="POST">
                         @csrf
                         @method('DELETE')

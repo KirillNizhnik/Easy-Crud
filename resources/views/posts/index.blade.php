@@ -22,6 +22,7 @@
                     <th>Title</th>
                     <th>Content</th>
                     <th>Category</th>
+                    <th>Tags</th>
                     <th>Actions</th>
                 </tr>
                 </thead>
@@ -36,6 +37,13 @@
                             @else
                                 Non Category
                             @endif
+                        </td>
+                        <td>
+                            @forelse ($post->tags as $tag)
+                                {{ $tag->title }}{{ !$loop->last ? ', ' : '' }}
+                            @empty
+                                No Tags
+                            @endforelse
                         </td>
 
                         <td>
