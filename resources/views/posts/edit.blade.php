@@ -34,6 +34,30 @@
                         <label for="content" class="form-label">Content</label>
                         <textarea class="form-control" id="content" name="content" rows="5" required>{{ old('content', $post->content) }}</textarea>
                     </div>
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Select Category</label>
+                        <select id="category" class="form-select" aria-label="Select Category" name="category_id">
+                            @foreach($categories as $category)
+                                <option
+                                    {{$category->id === optional($post->category)->id ? "selected" : ""}}
+                                    value="{{$category->id}}">
+                                    {{$category->title}}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tags" class="form-label">Select Tags</label>
+                        <select id="tags" multiple class="form-select" aria-label="Select Tags" name="tags[]">
+                            @foreach($tags as $tag)
+                                <option
+                                    {{ $post->tags->contains($tag->id) ? "selected" : "" }}
+                                    value="{{$tag->id}}">
+                                    {{$tag->title}}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
 
                     <div class="mb-3">
                         <label for="image" class="form-label">Upload Image</label>

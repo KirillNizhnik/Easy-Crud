@@ -34,6 +34,28 @@
                     </div>
 
                     <div class="mb-3">
+                        <label for="category" class="form-label">Select Category</label>
+                        <select id="category" class="form-select" aria-label="Select Category" name="category_id">
+                            @foreach($categories as $category)
+                                <option value="{{$category->id}}">
+                                    {{$category->title}}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tags" class="form-label">Select Tags</label>
+                        <select id="tags" multiple class="form-select" aria-label="Select Tags" name="tags[]">
+                            @foreach($tags as $tag)
+                                <option
+                                    value="{{$tag->id}}">
+                                    {{$tag->title}}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
                         <label for="image" class="form-label">Upload Image</label>
                         <input type="file" class="form-control" id="image" name="image" accept="image/*">
                     </div>

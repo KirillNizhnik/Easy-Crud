@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\PostTag;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -25,7 +27,10 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('posts.create');
+        $categories = Category::all();
+        $tags = Tag::all();
+
+        return view('posts.create', compact('categories', 'tags'));
     }
 
     /**
@@ -36,17 +41,21 @@ class PostController extends Controller
         $validated = $request->validate([
             'title'   => 'required|string|max:255',
             'content' => 'required|string',
-            'image'   => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240'
+            'image'   => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
+            'category_id' => '',
+            'tags' => '',
         ]);
+        $tags = $validated['tags'];
+        unset($validated['tags']);
 
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('uploads', 'public');
             $validated['image'] = $path;
-            dump($validated);
         }
 
 
-        Post::create($validated);
+        $post = Post::create($validated);
+        $post->tags()->sync($tags);
 
         return redirect()->route('posts.index')->with('success', 'Post created successfully!');
     }
@@ -59,7 +68,9 @@ class PostController extends Controller
 
     public function edit(Post $post)
     {
-        return view('posts.edit', compact('post'));
+        $categories = Category::all();
+        $tags = Tag::all();
+        return view('posts.edit', compact('post', 'categories', 'tags'));
     }
 
 
@@ -69,16 +80,20 @@ class PostController extends Controller
             'title'   => 'required|string|max:255',
             'content' => 'required|string',
             'image'   => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
+            'category_id' => '',
+            'tags' => '',
         ]);
+        $tags = $validated['tags'];
+        unset($validated['tags']);
 
         if ($request->hasFile('image')) {
             if ($post->image) {
                 Storage::disk('public')->delete($post->image);
             }
-
             $validated['image'] = $request->file('image')->store('uploads', 'public');
         }
         $post->update($validated);
+        $post->tags()->sync($tags);
         return redirect()->route('posts.index')->with('success', 'Post updated successfully.');
     }
 
