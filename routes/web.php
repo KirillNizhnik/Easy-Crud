@@ -12,3 +12,9 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::resource('posts', PostController::class);
 
 
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('posts', PostController::class);
+});
+
+
+
